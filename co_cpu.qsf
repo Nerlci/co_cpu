@@ -48,3 +48,18 @@ set_global_assignment -name VHDL_FILE main.vhd
 set_global_assignment -name OPTIMIZE_HOLD_TIMING OFF
 set_global_assignment -name OPTIMIZE_MULTI_CORNER_TIMING OFF
 set_global_assignment -name FITTER_EFFORT "STANDARD FIT"
+set_global_assignment -name MAX7000_DEVICE_IO_STANDARD TTL
+set_location_assignment PIN_83 -to t3
+set_location_assignment PIN_11 -to ir[7]
+set_location_assignment PIN_10 -to ir[6]
+set_location_assignment PIN_9 -to ir[5]
+set_location_assignment PIN_8 -to ir[4]
+set_location_assignment PIN_6 -to swc
+set_location_assignment PIN_5 -to swb
+set_location_assignment PIN_4 -to swa
+set_location_assignment PIN_16 -to w3
+set_location_assignment PIN_15 -to w2
+set_location_assignment PIN_12 -to w1
+set_location_assignment PIN_2 -to c
+set_location_assignment PIN_84 -to z
+set_location_assignment PIN_20 -to drw

@@ -1,10 +1,11 @@
-library ieee
+library ieee;
 use ieee.std_logic_1164.all;
 use ieee.std_logic_unsigned.all;
 
-entity main is
-    port(clk: in std_logic;
-         ir: in std_logic_vector(7 downto 0);
+entity co_cpu is
+    port(t3: in std_logic;
+         ir: in std_logic_vector(7 downto 4);
+         swa, swb, swc: in std_logic;
          w1, w2, w3: in std_logic;
          c, z: in std_logic;
          drw: out std_logic;
@@ -20,10 +21,10 @@ entity main is
          m: out std_logic;
          abus, sbus, mbus: out std_logic;
          short, long: out std_logic;
-         sel: out std_logic_vector(3 downto 0);
-end main;
+         sel: out std_logic_vector(3 downto 0));
+end co_cpu;
 
-architecture main_logic of main is
+architecture co_cpu_logic of co_cpu is
 begin
 
-end main_logic;
+end co_cpu_logic;

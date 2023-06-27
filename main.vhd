@@ -29,27 +29,27 @@ architecture co_cpu_logic of co_cpu is
 signal reg_w, reg_r, mem_w, mem_r, prog, ph: std_logic := '0';
 signal nop, add, sub, and_ins, inc, ld, st, jc, jz, jmp, out_ins, xor_ins, cmp, mov, stp_ins: std_logic := '0';
 begin
-    prog <= '1' if sw = "000" else '0';
-    reg_w <= '1' if sw = "100" else '0';
-    reg_r <= '1' if sw = "011" else '0';
-    mem_w <= '1' if sw = "001" else '0';
-    mem_r <= '1' if sw = "010" else '0';
+    prog <= '1' when sw = "000" else '0';
+    reg_w <= '1' when sw = "100" else '0';
+    reg_r <= '1' when sw = "011" else '0';
+    mem_w <= '1' when sw = "001" else '0';
+    mem_r <= '1' when sw = "010" else '0';
     
-    nop <= if ir = "0000" and prog = '1' and ph = '1' else '0';
-    add <= if ir = "0001" and prog = '1' and ph = '1' else '0';
-    sub <= if ir = "0010" and prog = '1' and ph = '1' else '0';
-    and_ins <= if ir = "0011" and prog = '1' and ph = '1' else '0';
-    inc <= if ir = "0100" and prog = '1' and ph = '1' else '0';
-    ld <= if ir = "0101" and prog = '1' and ph = '1' else '0';
-    st <= if ir = "0110" and prog = '1' and ph = '1' else '0';
-    jc <= if ir = "0111" and prog = '1' and ph = '1' else '0';
-    jz <= if ir = "1000" and prog = '1' and ph = '1' else '0';
-    jmp <= if ir = "1001" and prog = '1' and ph = '1' else '0';
-    out_ins <= if ir = "1010" and prog = '1' and ph = '1' else '0';
-    xor_ins <= if ir = "1011" and prog = '1' and ph = '1' else '0';
-    cmp <= if ir = "1100" and prog = '1' and ph = '1' else '0';
-    mov <= if ir = "1101" and prog = '1' and ph = '1' else '0';
-    stp_ins <= if ir = "1110" and prog = '1' and ph = '1' else '0';
+    nop <= '1' when ir = "0000" and prog = '1' and ph = '1' else '0';
+    add <= '1' when ir = "0001" and prog = '1' and ph = '1' else '0';
+    sub <= '1' when ir = "0010" and prog = '1' and ph = '1' else '0';
+    and_ins <= '1' when ir = "0011" and prog = '1' and ph = '1' else '0';
+    inc <= '1' when ir = "0100" and prog = '1' and ph = '1' else '0';
+    ld <= '1' when ir = "0101" and prog = '1' and ph = '1' else '0';
+    st <= '1' when ir = "0110" and prog = '1' and ph = '1' else '0';
+    jc <= '1' when ir = "0111" and prog = '1' and ph = '1' else '0';
+    jz <= '1' when ir = "1000" and prog = '1' and ph = '1' else '0';
+    jmp <= '1' when ir = "1001" and prog = '1' and ph = '1' else '0';
+    out_ins <= '1' when ir = "1010" and prog = '1' and ph = '1' else '0';
+    xor_ins <= '1' when ir = "1011" and prog = '1' and ph = '1' else '0';
+    cmp <= '1' when ir = "1100" and prog = '1' and ph = '1' else '0';
+    mov <= '1' when ir = "1101" and prog = '1' and ph = '1' else '0';
+    stp_ins <= '1' when ir = "1110" and prog = '1' and ph = '1' else '0';
     
 
     process(clr, t3, w3, w2, w1)

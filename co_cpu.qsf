@@ -54,9 +54,6 @@ set_location_assignment PIN_11 -to ir[7]
 set_location_assignment PIN_10 -to ir[6]
 set_location_assignment PIN_9 -to ir[5]
 set_location_assignment PIN_8 -to ir[4]
-set_location_assignment PIN_6 -to swc
-set_location_assignment PIN_5 -to swb
-set_location_assignment PIN_4 -to swa
 set_location_assignment PIN_16 -to w3
 set_location_assignment PIN_15 -to w2
 set_location_assignment PIN_12 -to w1
@@ -89,3 +86,7 @@ set_location_assignment PIN_51 -to sel[3]
 set_location_assignment PIN_50 -to sel[2]
 set_location_assignment PIN_49 -to sel[1]
 set_location_assignment PIN_48 -to sel[0]
+set_location_assignment PIN_1 -to clr
+set_location_assignment PIN_6 -to sw[2]
+set_location_assignment PIN_5 -to sw[1]
+set_location_assignment PIN_4 -to sw[0]

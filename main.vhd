@@ -27,35 +27,40 @@ end co_cpu;
 
 architecture co_cpu_logic of co_cpu is
 signal reg_w, reg_r, mem_w, mem_r, prog, ph: std_logic := '0';
-signal nop, add, sub, and_, inc, ld, st, jc, jz, jmp, out_, xor_, cmp, mov, stp_: std_logic := '0';
+signal nop, add, sub, and_ins, inc, ld, st, jc, jz, jmp, out_ins, xor_ins, cmp, mov, stp_ins: std_logic := '0';
 begin
-    if sw = "000" then
-        case ir is
-            when "0000" => nop <= '1';
-            when "0001" => add <= '1';
-            when "0010" => sub <= '1';
-            when "0011" => and_ <= '1';
-            when "0100" => inc <= '1';
-            when "0101" => ld <= '1';
-            when "0110" => st <= '1';
-            when "0111" => jc <= '1';
-            when "1000" => jz <= '1';
-            when "1001" => jmp <= '1';
-            when "1010" => out_ <= '1';
-            when "1011" => xor_ <= '1';
-            when "1100" => cmp <= '1';
-            when "1101" => mov <= '1';
-            when "1110" => stp_ <= '1';
-        end case;
-    else
-        case sw is
-            when "000" => prog <= '1';
-            when "011" => reg_w <= '1';
-            when "100" => reg_r <= '1';
-            when "010" => mem_w <= '1';
-            when "001" => mem_r <= '1';
-        end case;
-    end if;
+    process(sw, ir)
+    begin
+        if sw = "000" then
+            case ir is
+                when "0000" => nop <= '1';
+                when "0001" => add <= '1';
+                when "0010" => sub <= '1';
+                when "0011" => and_ins <= '1';
+                when "0100" => inc <= '1';
+                when "0101" => ld <= '1';
+                when "0110" => st <= '1';
+                when "0111" => jc <= '1';
+                when "1000" => jz <= '1';
+                when "1001" => jmp <= '1';
+                when "1010" => out_ins <= '1';
+                when "1011" => xor_ins <= '1';
+                when "1100" => cmp <= '1';
+                when "1101" => mov <= '1';
+                when "1110" => stp_ins <= '1';
+                when others => nop <= '1';
+            end case;
+        else
+            case sw is
+                when "000" => prog <= '1';
+                when "011" => reg_w <= '1';
+                when "100" => reg_r <= '1';
+                when "010" => mem_w <= '1';
+                when "001" => mem_r <= '1';
+                when others => nop <= '1';
+            end case;
+        end if;
+    end process;
 
     process(clr, t3, w3, w2, w1)
 	begin
@@ -70,25 +75,25 @@ begin
 		end if;
 	end process;
 
-    drw <= ((add or sub or and_ or inc or xor_ or mov) and w2) or (ld and w3) and (reg_w and (w1 or w2));
+    drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w2) or (ld and w3) or (reg_w and (w1 or w2));
     pcinc <= prog and w1;
-    arinc <= (mem_w or memr) and w1 and ph;
+    arinc <= (mem_w or mem_r) and w1 and ph;
     lpc <= ((jmp) and w2) or (prog and w1 and not ph);
-    lar <= ((ld or st) and w2) or ((mem_w or memr) and w1 and not ph);
+    lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
     lir <= (prog and w1 and ph);
     pcadd <= (jc or jz) and w2;
     selctl <= ((mem_w or mem_r) and w1) or (reg_w and (w1 or w2)) or reg_r; -- why not reg_r or reg_w?
     memw <= (st and w3) or (mem_w and w1 and ph);
-    stp <= (stp_ and w2) or (reg_w and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
+    stp <= (stp_ins and w2) or (reg_w and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
     ldc <= (add or sub or inc or cmp) and w2;
-    ldz <= (add or sub or and_ or xor_ or inc or cmp) and w2;
+    ldz <= (add or sub or and_ins or xor_ins or inc or cmp) and w2;
     cin <= add and w2;
-    s(3) <= ((add or and_ or inc or ld or jmp or out_ or mov) and w2) or st;
-    s(2) <= (sub or st or jmp or xor_ or cmp) and w2;
-    s(1) <= ((sub or and_ or ld or jmp or out_ or xor_ or cmp or mov) and w2) or st;
-    s(0) <= (add and and_ and st and jmp) and w2;
-    m <= ((and_ or ld or jmp or out_ or xor_) and w2) or st;
-    abus <= ((add or sub or and_ or inc or ld or jmp or out_ or xor_ or mov) and w2) or st;
+    s(3) <= ((add or and_ins or inc or ld or jmp or out_ins or mov) and w2) or st;
+    s(2) <= (sub or st or jmp or xor_ins or cmp) and w2;
+    s(1) <= ((sub or and_ins or ld or jmp or out_ins or xor_ins or cmp or mov) and w2) or st;
+    s(0) <= (add and and_ins and st and jmp) and w2;
+    m <= ((and_ins or ld or jmp or out_ins or xor_ins) and w2) or st;
+    abus <= ((add or sub or and_ins or inc or ld or jmp or out_ins or xor_ins or mov) and w2) or st;
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph);
     mbus <= (ld and w3) or (mem_r and w1 and ph);
     short <= ((mem_r or mem_w) and w1) or (prog and not ph);

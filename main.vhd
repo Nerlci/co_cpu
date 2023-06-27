@@ -53,10 +53,10 @@ begin
         else
             case sw is
                 when "000" => prog <= '1';
-                when "011" => reg_w <= '1';
-                when "100" => reg_r <= '1';
-                when "010" => mem_w <= '1';
-                when "001" => mem_r <= '1';
+                when "100" => reg_w <= '1';
+                when "011" => reg_r <= '1';
+                when "001" => mem_w <= '1';
+                when "010" => mem_r <= '1';
                 when others => nop <= '1';
             end case;
         end if;

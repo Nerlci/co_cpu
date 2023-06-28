@@ -78,7 +78,7 @@ begin
     ldc <= (add or sub or inc or cmp) and w2;
     ldz <= (add or sub or and_ins or xor_ins or inc or cmp) and w2;
     cin <= add and w2;
-    s(3) <= ((add or and_ins or inc or ld or jmp or out_ins or mov) and w2) or st;
+    s(3) <= ((add or and_ins or ld or jmp or out_ins or mov) and w2) or st;
     s(2) <= (sub or st or jmp or xor_ins or cmp) and w2;
     s(1) <= ((sub or and_ins or ld or jmp or out_ins or xor_ins or cmp or mov) and w2) or st;
     s(0) <= (add and and_ins and st and jmp) and w2;

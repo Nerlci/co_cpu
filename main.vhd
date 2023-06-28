@@ -66,11 +66,11 @@ begin
 	end process;
 
     drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w2) or (ld and w3) or (reg_w and (w1 or w2));
-    pcinc <= prog and w1;
+    pcinc <= prog and w1 and ph;
     arinc <= (mem_w or mem_r) and w1 and ph;
     lpc <= ((jmp) and w2) or (prog and w1 and not ph);
     lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
-    lir <= (prog and w1 and ph);
+    lir <= prog and w1 and ph;
     pcadd <= (jc or jz) and w2;
     selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2));
     memw <= (st and w3) or (mem_w and w1 and ph);

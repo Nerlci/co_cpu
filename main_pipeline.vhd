@@ -66,14 +66,14 @@ begin
 	end process;
 
     drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w1) or (ld and w2) or (reg_w and (w1 or w2));
-    pcinc <= (nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1 or ((ld or st or jmp) and w2) or 
+    pcinc <= ((nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1) or ((ld or st or jmp) and w2) or 
              (prog and w2 and not ph) or (jc and ((w1 and not c) or (w2 and c))) or (jz and ((w1 and not z) or (w2 and z)));
     arinc <= (mem_w or mem_r) and w1 and ph;
     lpc <= ((jmp) and w1) or (prog and w1 and not ph);
-    lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
-    lir <= (nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1 or ((ld or st or jmp) and w2) or 
+    lar <= ((ld or st) and w1) or ((mem_w or mem_r) and w1 and not ph);
+    lir <= ((nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1) or ((ld or st or jmp) and w2) or 
            (prog and w2 and not ph) or (jc and ((w1 and not c) or (w2 and c))) or (jz and ((w1 and not z) or (w2 and z)));
-    pcadd <= ((jc and c) or (jz and z)) and w2;
+    pcadd <= ((jc and c) or (jz and z)) and w1;
     selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2));
     memw <= (st and w2) or (mem_w and w1 and ph);
     stp <= (stp_ins and w1) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
@@ -89,7 +89,8 @@ begin
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph);
     mbus <= (ld and w2) or (mem_r and w1 and ph);
     short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph) or 
-             ((nop or add or sub or and_ins or inc or or jc or jz or jmp or out_ins or xor_ins or cmp or mov or stp_ins) and w1);
+             ((nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov or stp_ins) and w1)
+             or (jc and w1 and not c) or (jz and w1 and not z);
     sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2);
     sel(2) <= reg_w and w2;
     sel(1) <= (reg_w and ((w1 and not ph) or (w2 and ph))) or (reg_r and w2);

@@ -71,7 +71,7 @@ begin
     lpc <= ((jmp) and w2) or (prog and w1 and not ph);
     lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
     lir <= prog and w1 and ph;
-    pcadd <= (jc or jz) and w2;
+    pcadd <= ((jc and c) or (jz and z)) and w2;
     selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2));
     memw <= (st and w3) or (mem_w and w1 and ph);
     stp <= (stp_ins and w2) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);

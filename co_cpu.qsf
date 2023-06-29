@@ -89,4 +89,4 @@ set_location_assignment PIN_1 -to clr
 set_location_assignment PIN_6 -to sw[2]
 set_location_assignment PIN_5 -to sw[1]
 set_location_assignment PIN_4 -to sw[0]
-set_global_assignment -name VHDL_FILE main_pipeline.vhd
+set_global_assignment -name VHDL_FILE main_interrupt.vhd

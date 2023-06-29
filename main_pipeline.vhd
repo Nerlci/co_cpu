@@ -65,29 +65,31 @@ begin
 		end if;
 	end process;
 
-    drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w2) or (ld and w3) or (reg_w and (w1 or w2));
-    pcinc <= prog and w1;
+    drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w1) or (ld and w2) or (reg_w and (w1 or w2));
+    pcinc <= (nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1 or ((ld or st or jmp) and w2) or 
+             (prog and w2 and not ph) or (jc and ((w1 and not c) or (w2 and c))) or (jz and ((w1 and not z) or (w2 and z)));
     arinc <= (mem_w or mem_r) and w1 and ph;
-    lpc <= ((jmp) and w2) or (prog and w1 and not ph);
+    lpc <= ((jmp) and w1) or (prog and w1 and not ph);
     lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
-    lir <= (prog and w1 and ph);
-    pcadd <= (jc or jz) and w2;
+    lir <= (nop or add or sub or and_ins or inc or out_ins or xor_ins or cmp or mov) and w1 or ((ld or st or jmp) and w2) or 
+           (prog and w2 and not ph) or (jc and ((w1 and not c) or (w2 and c))) or (jz and ((w1 and not z) or (w2 and z)));
+    pcadd <= ((jc and c) or (jz and z)) and w2;
     selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2));
-    memw <= (st and w3) or (mem_w and w1 and ph);
-    stp <= (stp_ins and w2) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
-    ldc <= (add or sub or inc or cmp) and w2;
-    ldz <= (add or sub or and_ins or xor_ins or inc or cmp) and w2;
-    cin <= add and w2;
-    s(3) <= ((add or and_ins or inc or ld or jmp or out_ins or mov) and w2) or st;
-    s(2) <= (sub or st or jmp or xor_ins or cmp) and w2;
-    s(1) <= ((sub or and_ins or ld or jmp or out_ins or xor_ins or cmp or mov) and w2) or st;
-    s(0) <= (add and and_ins and st and jmp) and w2;
-    m <= ((and_ins or ld or jmp or out_ins or xor_ins) and w2) or st;
-    abus <= ((add or sub or and_ins or inc or ld or jmp or out_ins or xor_ins or mov) and w2) or st;
+    memw <= (st and w2) or (mem_w and w1 and ph);
+    stp <= (stp_ins and w1) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
+    ldc <= (add or sub or inc or cmp) and w1;
+    ldz <= (add or sub or and_ins or xor_ins or inc or cmp) and w1;
+    cin <= add and w1;
+    s(3) <= ((add or and_ins or ld or jmp or out_ins or mov) and w1) or st;
+    s(2) <= (sub or st or jmp or xor_ins or cmp) and w1;
+    s(1) <= ((sub or and_ins or ld or jmp or out_ins or xor_ins or cmp or mov) and w1) or st;
+    s(0) <= (add or and_ins or st or jmp) and w1;
+    m <= ((and_ins or ld or jmp or out_ins or xor_ins) and w1) or st;
+    abus <= ((add or sub or and_ins or inc or ld or jmp or out_ins or xor_ins or mov) and w1) or st;
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph);
-    mbus <= (ld and w3) or (mem_r and w1 and ph);
-    short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
-    long <= (ld or st) and w2;
+    mbus <= (ld and w2) or (mem_r and w1 and ph);
+    short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph) or 
+             ((nop or add or sub or and_ins or inc or or jc or jz or jmp or out_ins or xor_ins or cmp or mov or stp_ins) and w1);
     sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2);
     sel(2) <= reg_w and w2;
     sel(1) <= (reg_w and ((w1 and not ph) or (w2 and ph))) or (reg_r and w2);

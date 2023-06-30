@@ -115,7 +115,6 @@ begin
             empty <= '0';
         end if;
     end process;
-
     
     light_int <= int;
     
@@ -135,7 +134,7 @@ begin
     s(2) <= (sub or st or iret) and w2;
     s(1) <= ((sub or and_ins or ld or jmp or iret or out_ins) and w2) or st;
     s(0) <= (add or and_ins or st or iret) and w2;
-    m <= ((and_ins or ld or jmp or iret or out_ins or mov) and w2) or st;
+    m <= ((and_ins or ld or jmp or iret or out_ins) and w2) or st;
     abus <= ((add or sub or and_ins or inc or ld or jmp or iret or out_ins) and w2) or st or (prog and w1 and ph and not in_int);
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph) or (prog and w1 and ph and in_int and int);
     mbus <= (ld and w3) or (mem_r and w1 and ph);

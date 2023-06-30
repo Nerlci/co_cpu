@@ -91,4 +91,4 @@ set_location_assignment PIN_5 -to sw[1]
 set_location_assignment PIN_4 -to sw[0]
 set_location_assignment PIN_61 -to pulse
 set_location_assignment PIN_17 -to light_int
-set_global_assignment -name VHDL_FILE main.vhd
+set_global_assignment -name VHDL_FILE main_interrupt.vhd

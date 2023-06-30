@@ -9,6 +9,7 @@ entity co_cpu is
          sw: in std_logic_vector(2 downto 0);
          w1, w2, w3: in std_logic;
          c, z: in std_logic;
+         light_int: out std_logic;
          drw: out std_logic;
          pcinc, arinc: out std_logic;
          lpc, lar, lir: out std_logic;
@@ -84,9 +85,9 @@ begin
             int_en <= '1';
         elsif (int = '1' and in_int = '1' and prog = '1' and w2 = '1' and ph = '1') then
             int_en <= '0';
-        elsif ((int = '0' and in_int = '1') or (di = '1' and w2 = '1')) then
+        elsif ((int = '0' and in_int = '1') or (di = '1' and w2 = '1' and ph = '1')) then
             int_en <= '0';
-        elsif (in_int = '0' and ei = '1' and w2 = '1') then
+        elsif (in_int = '0' and ei = '1' and w2 = '1'  and ph = '1') then
             int_en <= '1';
         end if;
     end process;
@@ -95,12 +96,14 @@ begin
     begin
         if (clr = '0') then
             in_int <= '0';
-        elsif (int = '1' and (((prog = '1' and ph = '1' and not (ld = '1' or st = '1')) and w2 = '1') or ((ld = '1' or st = '1') and w3 = '1'))) then
+        elsif (int = '1' and ((prog = '1' and ph = '1' and not (ld = '1' or st = '1') and w2 = '1') or (prog = '1' and ph = '1' and (ld = '1' or st = '1') and w3 = '1'))) then
             in_int <= '1';
         elsif (iret = '1' and w2 = '1') then
             in_int <= '0';
         end if;
     end process;
+    
+    light_int <= in_int;
     
     drw <= ((add or sub or and_ins or inc or (jmp and not in_int)) and w2) or (ld and w3) or (reg_w and (w1 or w2)) or (prog and w1 and not in_int);
     pcinc <= prog and w1 and ph and not (in_int and int);
@@ -108,7 +111,7 @@ begin
     lpc <= ((jmp or iret) and w2) or (prog and w1 and not ph) or (prog and w1 and ph and in_int and int);
     lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
     lir <= prog and w1 and ph and not (in_int and int);
-    selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2)) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
+    selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2)) or (prog and w1 and not in_int);
     memw <= (st and w3) or (mem_w and w1 and ph);
     stp <= (stp_ins and w2) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph) or (prog and w1 and ph and in_int and int);
     ldc <= (add or sub or inc) and w2;
@@ -124,8 +127,8 @@ begin
     mbus <= (ld and w3) or (mem_r and w1 and ph);
     short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
     long <= (ld or st) and w2;
-    sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
-    sel(2) <= (reg_w and w2) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
+    sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2) or (prog and w1 and not in_int);
+    sel(2) <= (reg_w and w2) or (prog and w1 and not in_int);
     sel(1) <= (reg_w and ((w1 and not ph) or (w2 and ph))) or (reg_r and w2);
     sel(0) <= (reg_w and w1) or (reg_r and (w1 or w2));
 end co_cpu_logic;

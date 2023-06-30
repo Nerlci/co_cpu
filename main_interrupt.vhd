@@ -96,7 +96,7 @@ begin
     begin
         if (clr = '0') then
             in_int <= '0';
-        elsif (int = '1' and ((prog = '1' and ph = '1' and not (ld = '1' or st = '1') and w2 = '1') or (prog = '1' and ph = '1' and (ld = '1' or st = '1') and w3 = '1'))) then
+        elsif (int = '1' and (prog = '1' and ph = '1' and w3 = '1')) then
             in_int <= '1';
         elsif (iret = '1' and w2 = '1') then
             in_int <= '0';
@@ -126,7 +126,7 @@ begin
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph) or (prog and w1 and ph and in_int and int);
     mbus <= (ld and w3) or (mem_r and w1 and ph);
     short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
-    long <= (ld or st) and w2;
+    long <= ((ld or st) and w2) or int;
     sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2) or (prog and w1 and not in_int);
     sel(2) <= (reg_w and w2) or (prog and w1 and not in_int);
     sel(1) <= (reg_w and ((w1 and not ph) or (w2 and ph))) or (reg_r and w2);

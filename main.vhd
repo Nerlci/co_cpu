@@ -82,7 +82,7 @@ begin
     s(2) <= (sub or st or jmp or xor_ins or cmp) and w2;
     s(1) <= ((sub or and_ins or ld or jmp or out_ins or xor_ins or cmp or mov) and w2) or st;
     s(0) <= (add or and_ins or st or jmp) and w2;
-    m <= ((and_ins or ld or jmp or out_ins or xor_ins) and w2) or st;
+    m <= ((and_ins or ld or jmp or out_ins or xor_ins or mov) and w2) or st;
     abus <= ((add or sub or and_ins or inc or ld or jmp or out_ins or xor_ins or mov) and w2) or st;
     sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph);
     mbus <= (ld and w3) or (mem_r and w1 and ph);

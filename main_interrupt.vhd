@@ -69,18 +69,20 @@ begin
     begin
         if (clr = '0') then
             int <= '0';
-        elsif (pulse'event and pulse = '1') then
-            int <= int_en;
-        elsif (int_en = '0') then
+        elsif (int_en = '1') then
+            if (pulse'event and pulse = '1') then
+                int <= '1';
+            end if;
+        else
             int <= '0';
         end if;
     end process;
 
-    process(clr, int, in_int, ei, di, prog, w1, w2, ph)
+    process(clr, int, in_int, ei, di, prog, w2, ph)
     begin
         if (clr = '0') then
             int_en <= '1';
-        elsif (int = '1' and in_int = '1' and prog = '1' and w1 = '1' and ph = '1') then
+        elsif (int = '1' and in_int = '1' and prog = '1' and w2 = '1' and ph = '1') then
             int_en <= '0';
         elsif ((int = '0' and in_int = '1') or (di = '1' and w2 = '1')) then
             int_en <= '0';
@@ -96,36 +98,34 @@ begin
         elsif (int = '1' and (((prog = '1' and ph = '1' and not (ld = '1' or st = '1')) and w2 = '1') or ((ld = '1' or st = '1') and w3 = '1'))) then
             in_int <= '1';
         elsif (iret = '1' and w2 = '1') then
-            int_en <= '0';
+            in_int <= '0';
         end if;
     end process;
-
-    in_int <= int and (((prog and ph and not (ld or st)) and w2) or ((ld or st) and w3));
-
-    drw <= ((add or sub or and_ins or inc) and w2) or (ld and w3) or (reg_w and (w1 or w2)) or (prog and w1);
-    pcinc <= prog and w1 and ph;
+    
+    drw <= ((add or sub or and_ins or inc or (jmp and not in_int)) and w2) or (ld and w3) or (reg_w and (w1 or w2)) or (prog and w1 and not in_int);
+    pcinc <= prog and w1 and ph and not (in_int and int);
     arinc <= (mem_w or mem_r) and w1 and ph;
-    lpc <= ((jmp) and w2) or (prog and w1 and not ph);
+    lpc <= ((jmp or iret) and w2) or (prog and w1 and not ph) or (prog and w1 and ph and in_int and int);
     lar <= ((ld or st) and w2) or ((mem_w or mem_r) and w1 and not ph);
-    lir <= prog and w1 and ph;
-    selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2)) or (prog and w1 and not ph);
+    lir <= prog and w1 and ph and not (in_int and int);
+    selctl <= ((mem_w or mem_r) and w1) or ((reg_r or reg_w) and (w1 or w2)) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
     memw <= (st and w3) or (mem_w and w1 and ph);
-    stp <= (stp_ins and w2) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
+    stp <= (stp_ins and w2) or ((reg_r or reg_w) and (w1 or w2)) or ((mem_r or mem_w) and w1) or (prog and w1 and not ph) or (prog and w1 and ph and in_int and int);
     ldc <= (add or sub or inc) and w2;
     ldz <= (add or sub or and_ins  or inc) and w2;
     cin <= add and w2;
-    s(3) <= ((add or and_ins or ld or jmp or out_ins) and w2) or st;
-    s(2) <= (sub or st or jmp ) and w2;
-    s(1) <= ((sub or and_ins or ld or jmp or out_ins) and w2) or st;
-    s(0) <= (add or and_ins or st or jmp) and w2;
-    m <= ((and_ins or ld or jmp or out_ins ) and w2) or st;
-    abus <= ((add or sub or and_ins or inc or ld or jmp or out_ins) and w2) or st or (prog and w1 and ph);
-    sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph);
+    s(3) <= ((add or and_ins or ld or jmp or iret or out_ins) and w2) or st;
+    s(2) <= (sub or st or iret) and w2;
+    s(1) <= ((sub or and_ins or ld or jmp or iret or out_ins) and w2) or st;
+    s(0) <= (add or and_ins or st or iret) and w2;
+    m <= ((and_ins or ld or jmp or iret or out_ins) and w2) or st;
+    abus <= ((add or sub or and_ins or inc or ld or jmp or iret or out_ins) and w2) or st or (prog and w1 and ph and not in_int);
+    sbus <= (reg_w and (w1 or w2)) or (mem_w and w1) or ((mem_r or prog) and w1 and not ph) or (prog and w1 and ph and in_int and int);
     mbus <= (ld and w3) or (mem_r and w1 and ph);
     short <= ((mem_r or mem_w) and w1) or (prog and w1 and not ph);
     long <= (ld or st) and w2;
-    sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2) or (prog and w1 and not ph);
-    sel(2) <= (reg_w and w2) or (prog and w1 and not ph);
+    sel(3) <= (reg_w and ((w1 or w2) and ph)) or (reg_r and w2) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
+    sel(2) <= (reg_w and w2) or (prog and w1 and not in_int) or (prog and w1 and ph and in_int and int);
     sel(1) <= (reg_w and ((w1 and not ph) or (w2 and ph))) or (reg_r and w2);
     sel(0) <= (reg_w and w1) or (reg_r and (w1 or w2));
 end co_cpu_logic;

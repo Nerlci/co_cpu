@@ -52,18 +52,18 @@ begin
     stp_ins <= '1' when ir = "1110" and prog = '1' and ph = '1' else '0';
     
 
-  process(clr, t3, w3, w2, w1)
-	begin
-		if (clr = '0') then
-			ph <= '0';
-		elsif (t3'event and t3 = '0') then
-			if (ph = '0' and ((reg_w = '1' and w2 = '1') or ((mem_r = '1' or mem_w = '1' or prog = '1') and w1 = '1'))) then
-				ph <= '1';
-			elsif (ph = '1' and (reg_w = '1' and w2 = '1')) then
-				ph <= '0';
-			end if;
-		end if;
-	end process;
+    process(clr, t3, w3, w2, w1)
+    begin
+      if (clr = '0') then
+        ph <= '0';
+      elsif (t3'event and t3 = '0') then
+        if (ph = '0' and ((reg_w = '1' and w2 = '1') or ((mem_r = '1' or mem_w = '1' or prog = '1') and w1 = '1'))) then
+          ph <= '1';
+        elsif (ph = '1' and (reg_w = '1' and w2 = '1')) then
+          ph <= '0';
+        end if;
+      end if;
+    end process;
 
     drw <= ((add or sub or and_ins or inc or xor_ins or mov) and w2) or (ld and w3) or (reg_w and (w1 or w2));
     pcinc <= prog and w1 and ph;

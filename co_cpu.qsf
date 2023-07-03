@@ -91,4 +91,10 @@ set_location_assignment PIN_5 -to sw[1]
 set_location_assignment PIN_4 -to sw[0]
 set_location_assignment PIN_61 -to pulse
 set_location_assignment PIN_17 -to light_int
-set_global_assignment -name VHDL_FILE main_interrupt.vhd
+set_global_assignment -name VHDL_FILE main.vhd
+set_global_assignment -name VECTOR_WAVEFORM_FILE Waveform.vwf
+set_global_assignment -name SIMULATION_MODE FUNCTIONAL
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
+set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST ON -section_id eda_simulation
+set_global_assignment -name INCREMENTAL_VECTOR_INPUT_SOURCE "C:/Users/nerlc/OneDrive - bupt.edu.cn/Workspace/Quartus/co_cpu/Waveform.vwf"
